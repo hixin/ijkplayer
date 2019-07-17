@@ -269,13 +269,14 @@ IjkMediaMeta *ijkmp_get_meta_l(IjkMediaPlayer *mp)
 void ijkmp_shutdown_l(IjkMediaPlayer *mp)
 {
     assert(mp);
-
-    MPTRACE("ijkmp_shutdown_l()\n");
+    MPTRACE("ijkmp_shutdown_l(),lock\n");
+    pthread_mutex_lock(&mp->mutex);
     if (mp->ffplayer) {
         ffp_stop_l(mp->ffplayer);
         ffp_wait_stop_l(mp->ffplayer);
     }
-    MPTRACE("ijkmp_shutdown_l()=void\n");
+    pthread_mutex_unlock(&mp->mutex);
+    MPTRACE("ijkmp_shutdown_l()=void,unlock\n");
 }
 
 void ijkmp_shutdown(IjkMediaPlayer *mp)
